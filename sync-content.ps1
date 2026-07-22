@@ -9,7 +9,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$VaultPath   = "D:\Agent\DnD-Vault"
+$VaultPath = "D:\dnd\DnD-Vault"
 $ContentPath = Join-Path $PSScriptRoot "content"
 $RepoCommits = "https://github.com/DanilShekarev/dnd-wiki/commits/main/content"
 $utf8NoBom   = New-Object System.Text.UTF8Encoding($false)  # UTF-8 without BOM

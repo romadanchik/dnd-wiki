@@ -1,0 +1,153 @@
+// src/types.ts
+var defaultMapPageOptions = {
+  dataPath: "static/map",
+  frontmatterFlag: "map-page",
+  maxOverzoom: 4
+};
+
+// src/components/styles/map.scss
+var map_default = ".map-viewer {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n  background: #cfe0ec;\n  user-select: none;\n}\n.map-viewer .map-canvas {\n  position: absolute;\n  inset: 0;\n  width: 100%;\n  height: 100%;\n  display: block;\n  touch-action: none;\n  cursor: grab;\n}\n.map-viewer .map-canvas:active {\n  cursor: grabbing;\n}\n.map-viewer .map-loading,\n.map-viewer .map-error {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  padding: 10px 18px;\n  border-radius: 8px;\n  background: var(--light);\n  color: var(--darkgray);\n  border: 1px solid var(--lightgray);\n  font-size: 0.95rem;\n  pointer-events: none;\n}\n.map-viewer .map-error {\n  color: #a33;\n}\n.map-viewer .map-zoom-hud {\n  position: absolute;\n  right: 10px;\n  bottom: 10px;\n  padding: 2px 8px;\n  border-radius: 6px;\n  background: color-mix(in srgb, var(--light) 75%, transparent);\n  color: var(--darkgray);\n  font-size: 0.75rem;\n  pointer-events: none;\n}\n\n.page[data-frame=map] {\n  --map-sidebar-width: 320px;\n}\n\n.page[data-frame=map] .map-frame {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n  padding-left: 0;\n  transition: padding-left 0.2s ease;\n}\n\n.page[data-frame=map] .map-stage {\n  width: 100%;\n  height: 100%;\n}\n\n.page[data-frame=map] .map-stage > article {\n  width: 100%;\n  max-width: none;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\n\n.page[data-frame=map] .map-sidebar {\n  position: fixed;\n  top: 0;\n  height: 100vh;\n  height: 100dvh;\n  width: var(--map-sidebar-width);\n  box-sizing: border-box;\n  background: var(--light);\n  border-right: 1px solid var(--lightgray);\n  box-shadow: 8px 0 24px rgba(0, 0, 0, 0.12);\n  overflow-y: auto;\n  padding: 3.2rem 1rem 1rem;\n  left: calc(-1 * var(--map-sidebar-width));\n  transition: left 0.25s ease;\n  z-index: 20;\n}\n\n.page[data-frame=map] .map-sidebar-toggle {\n  position: fixed;\n  top: 12px;\n  left: 12px;\n  width: 32px;\n  height: 32px;\n  border: 1px solid var(--lightgray);\n  border-radius: 6px;\n  background: var(--light);\n  color: var(--darkgray);\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 30;\n  transition: background 0.1s ease, left 0.25s ease;\n}\n.page[data-frame=map] .map-sidebar-toggle:hover {\n  background: var(--lightgray);\n}\n.page[data-frame=map] .map-sidebar-toggle svg {\n  pointer-events: none;\n}\n\n.page[data-frame=map] .map-sidebar-icon-close {\n  display: none;\n}\n\n.page[data-frame=map].map-sidebar-open .map-sidebar {\n  left: 0;\n}\n\n.page[data-frame=map].map-sidebar-open .map-sidebar-toggle {\n  left: calc(var(--map-sidebar-width) + 12px);\n}\n\n.page[data-frame=map].map-sidebar-open .map-sidebar-icon-open {\n  display: none;\n}\n\n.page[data-frame=map].map-sidebar-open .map-sidebar-icon-close {\n  display: block;\n}";
+
+// src/components/scripts/map.inline.ts
+var map_inline_default = 'var U=Object.defineProperty;var K=(u,t,s)=>t in u?U(u,t,{enumerable:!0,configurable:!0,writable:!0,value:s}):u[t]=s;var l=(u,t,s)=>K(u,typeof t!="symbol"?t+"":t,s);var V=Math.PI/180,H=300,D=.925,G=.12,J=[.16,.13,.13],Q=[1,.92,.69],N=\'"MapLabelFont", Georgia, "Times New Roman", serif\',M=(u,t,s)=>Math.min(s,Math.max(t,u)),k=u=>`rgb(${Math.round(u[0]*255)},${Math.round(u[1]*255)},${Math.round(u[2]*255)})`,q=(u,t)=>u&&u.length>=3?[u[0],u[1],u[2]]:t,$=class{constructor(){l(this,"camX",0);l(this,"camY",0);l(this,"scale",1);l(this,"vw",1);l(this,"vh",1)}setViewport(t,s){this.vw=Math.max(1,t),this.vh=Math.max(1,s)}screenToWorld(t,s){return[(t-this.vw/2)/this.scale+this.camX,(s-this.vh/2)/this.scale+this.camY]}worldToScreen(t,s){return[(t-this.camX)*this.scale+this.vw/2,(s-this.camY)*this.scale+this.vh/2]}zoomAt(t,s,i,n,e){let[a,r]=this.screenToWorld(t,s);this.scale=M(this.scale*i,n,e),this.camX=a-(t-this.vw/2)/this.scale,this.camY=r-(s-this.vh/2)/this.scale}panByScreen(t,s){this.camX-=t/this.scale,this.camY-=s/this.scale}worldBounds(){let[t,s]=this.screenToWorld(0,0),[i,n]=this.screenToWorld(this.vw,this.vh);return[Math.min(t,i),Math.min(s,n),Math.max(t,i),Math.max(s,n)]}},X=class{constructor(t,s){l(this,"root");l(this,"canvas");l(this,"ctx");l(this,"hud");l(this,"cam",new $);l(this,"abort",new AbortController);l(this,"man",null);l(this,"vectors",null);l(this,"atlasMeta",null);l(this,"atlasBmp",null);l(this,"waterPattern",null);l(this,"waterSize",0);l(this,"base","");l(this,"ver","");l(this,"minScale",.001);l(this,"maxScale",8);l(this,"dirty",!0);l(this,"raf",0);l(this,"frameNo",0);l(this,"destroyed",!1);l(this,"tiles",new Map);l(this,"present",new Map);l(this,"tintCache",new Map);l(this,"markerOrder",[]);l(this,"labelLayouts",[]);l(this,"hitList",[]);l(this,"pointers",new Map);l(this,"pinchDist",0);l(this,"resizeObs",null);l(this,"fitted",!1);l(this,"maxOverzoomOpt",4);this.root=t,this.canvas=t.querySelector(".map-canvas"),this.ctx=this.canvas.getContext("2d"),this.hud=t.querySelector(".map-zoom-hud"),this.base="/"+s.dataPath.replace(/^\\/+|\\/+$/g,"")+"/",this.maxOverzoomOpt=s.maxOverzoom||4}async start(){let t=this.abort.signal,s=await(await fetch(this.base+"map.json",{cache:"no-cache",signal:t})).json();this.man=s,this.ver=encodeURIComponent(s.version||"");for(let[e,a]of Object.entries(s.levels))this.present.set(+e,new Set(a.tiles));let i="?v="+this.ver,n=[];if(n.push(fetch(this.base+s.assets.vectors+i,{signal:t}).then(e=>e.json()).then(e=>this.vectors=e)),n.push(fetch(this.base+s.assets.atlas+i,{signal:t}).then(e=>e.json()).then(e=>this.atlasMeta=e)),n.push(fetch(this.base+s.assets.atlasImage+i,{signal:t}).then(e=>e.blob()).then(e=>createImageBitmap(e)).then(e=>this.atlasBmp=e)),s.assets.water&&n.push(fetch(this.base+s.assets.water+i,{signal:t}).then(e=>e.blob()).then(e=>createImageBitmap(e)).then(e=>this.buildWaterPattern(e)).catch(()=>{})),s.assets.font&&typeof FontFace<"u"){let e=new FontFace("MapLabelFont",`url("${this.base}${s.assets.font}${i}")`);n.push(e.load().then(a=>document.fonts.add(a)).catch(()=>{}))}await Promise.all(n),!this.destroyed&&(this.prepareVectors(),this.setupInput(),this.setupResize(),this.fitView(),this.root.querySelector(".map-loading")?.setAttribute("hidden",""),this.requestRender())}showError(t){console.error("map viewer failed",t),this.root.querySelector(".map-loading")?.setAttribute("hidden",""),this.root.querySelector(".map-error")?.removeAttribute("hidden")}destroy(){this.destroyed=!0,this.abort.abort(),this.raf&&cancelAnimationFrame(this.raf),this.resizeObs?.disconnect();for(let t of this.tiles.values())t.bmp?.close();this.tiles.clear(),this.atlasBmp?.close(),this.root.dataset.initialized="false"}buildWaterPattern(t){let s=this.man,i=document.createElement("canvas");i.width=t.width,i.height=t.height;let n=i.getContext("2d");n.drawImage(t,0,0),n.globalCompositeOperation="multiply",n.fillStyle=k(s.background.waterColor||[.85,.92,1]),n.fillRect(0,0,i.width,i.height),n.globalCompositeOperation="destination-in",n.drawImage(t,0,0),this.waterSize=t.width,this.waterPattern=this.ctx.createPattern(i,"repeat"),t.close()}tintedSprite(t,s){if(!this.atlasBmp||!this.atlasMeta)return null;let i=c=>Math.round(M(c,0,1)*15),n=t.uv.join(",")+"|"+i(s[0])+","+i(s[1])+","+i(s[2]),e=this.tintCache.get(n);if(e)return e;let[a,r]=this.atlasSrc(t);e=document.createElement("canvas"),e.width=t.pw,e.height=t.ph;let o=e.getContext("2d");return o.drawImage(this.atlasBmp,a,r,t.pw,t.ph,0,0,t.pw,t.ph),o.globalCompositeOperation="multiply",o.fillStyle=k(s),o.fillRect(0,0,t.pw,t.ph),o.globalCompositeOperation="destination-in",o.drawImage(this.atlasBmp,a,r,t.pw,t.ph,0,0,t.pw,t.ph),this.tintCache.size>512&&this.tintCache.clear(),this.tintCache.set(n,e),e}atlasSrc(t){let s=this.atlasMeta;return[Math.round(t.uv[0]*s.w-.5),Math.round(t.uv[1]*s.h-.5)]}prepareVectors(){let t=this.vectors;if(!t)return;this.markerOrder=(t.markers||[]).filter(n=>this.atlasMeta?.sprites?.[n.tex]).slice().sort((n,e)=>n.y-e.y);let s=new Map;for(let n of t.paths||[])s.set(n.id,n.pts);let i=document.createElement("canvas").getContext("2d");this.labelLayouts=[];for(let n of t.labels||[]){let e=Math.max(8,+n.size||24);if(i.font=`${e}px ${N}`,n.path!=null&&s.has(n.path)){let a=s.get(n.path);if(a.length<2)continue;let r=(n.text||"").replace(/\\s+/g," ").trim();if(!r)continue;let o=a,c=a.length,h=a[c-1][0]-a[0][0],p=a[c-1][1]-a[0][1];(Math.abs(h)>=Math.abs(p)?h<0:p>0)!==!!n.pathFlip&&(o=a.slice().reverse());let f=[0];for(let b=1;b<o.length;b++)f.push(f[b-1]+Math.hypot(o[b][0]-o[b-1][0],o[b][1]-o[b-1][1]));let x=f[f.length-1];if(x<=0)continue;let w=Array.from(r).map(b=>({ch:b,advW:i.measureText(b).width})),m=w.reduce((b,O)=>b+O.advW,0),g=1/0,L=1/0,y=-1/0,S=-1/0;for(let b of o)g=Math.min(g,b[0]),L=Math.min(L,b[1]),y=Math.max(y,b[0]),S=Math.max(S,b[1]);let v=e*2+Math.abs(+n.pathOffset||0);this.labelLayouts.push({kind:"path",L:n,chars:w,widthW:m,curve:o,D:f,total:x,bbox:[g-v,L-v,y+v,S+v]})}else{let a=(n.text||"").split(`\n`).map(h=>({text:h,width:i.measureText(h).width}));if(!a.some(h=>h.text.trim()))continue;let r=Math.max(...a.map(h=>h.width)),o=a.length*e*D,c=Math.hypot(r,o);this.labelLayouts.push({kind:"flat",L:n,lines:a,bbox:[n.x-c,n.y-c,n.x+c,n.y+c]})}}}fitView(){let t=this.man,[s,i,n,e]=t.world.bbox,a=n-s,r=e-i,o=Math.min(this.cam.vw/a,this.cam.vh/r)*.9;this.minScale=o*.9,this.maxScale=t.nativeScale*this.maxOverzoomOpt,this.cam.camX=(s+n)/2,this.cam.camY=(i+e)/2,this.cam.scale=M(o,this.minScale,this.maxScale),this.fitted=!0}clampPan(){let t=this.man,[s,i,n,e]=t.world.bbox,a=(n-s)*.25,r=(e-i)*.25;this.cam.camX=M(this.cam.camX,s-a,n+a),this.cam.camY=M(this.cam.camY,i-r,e+r)}setupResize(){let t=()=>{let s=this.root.getBoundingClientRect(),i=window.devicePixelRatio||1,n=Math.max(1,Math.round(s.width)),e=Math.max(1,Math.round(s.height));if(this.canvas.width=Math.round(n*i),this.canvas.height=Math.round(e*i),this.cam.setViewport(n,e),!this.fitted&&this.man)this.fitView();else if(this.man){let[a,r,o,c]=this.man.world.bbox;this.minScale=Math.min(this.cam.vw/(o-a),this.cam.vh/(c-r))*.81}this.requestRender()};t(),this.resizeObs=new ResizeObserver(t),this.resizeObs.observe(this.root)}setupInput(){let t=this.abort.signal,s=this.canvas,i=e=>{let a=s.getBoundingClientRect();return[e.clientX-a.left,e.clientY-a.top]};s.addEventListener("pointerdown",e=>{if(s.setPointerCapture(e.pointerId),this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY}),this.pointers.size===2){let[a,r]=[...this.pointers.values()];this.pinchDist=Math.hypot(a.x-r.x,a.y-r.y)}},{signal:t}),s.addEventListener("pointermove",e=>{let a=this.pointers.get(e.pointerId);if(a&&(this.pointers.size===1&&(this.cam.panByScreen(e.clientX-a.x,e.clientY-a.y),this.clampPan(),this.requestRender()),a.x=e.clientX,a.y=e.clientY,this.pointers.size===2)){let[r,o]=[...this.pointers.values()],c=Math.hypot(r.x-o.x,r.y-o.y);if(this.pinchDist>0&&c>0){let h=s.getBoundingClientRect(),p=(r.x+o.x)/2-h.left,d=(r.y+o.y)/2-h.top;this.cam.zoomAt(p,d,c/this.pinchDist,this.minScale,this.maxScale),this.clampPan(),this.requestRender()}this.pinchDist=c}},{signal:t});let n=e=>{this.pointers.delete(e.pointerId),this.pinchDist=0};s.addEventListener("pointerup",n,{signal:t}),s.addEventListener("pointercancel",n,{signal:t}),s.addEventListener("wheel",e=>{e.preventDefault();let[a,r]=i(e);this.cam.zoomAt(a,r,Math.exp(-e.deltaY*.0012),this.minScale,this.maxScale),this.clampPan(),this.requestRender()},{passive:!1,signal:t}),s.addEventListener("dblclick",e=>{let[a,r]=i(e);this.cam.zoomAt(a,r,2,this.minScale,this.maxScale),this.clampPan(),this.requestRender()},{signal:t})}tileKey(t,s,i){return t+"/"+s+"_"+i}getTile(t,s,i){let n=this.tileKey(t,s,i),e=this.tiles.get(n);if(e)return e.used=this.frameNo,e;e={state:"loading",bmp:null,used:this.frameNo},this.tiles.set(n,e);let a=this.man,r=`${this.base}tiles/${t}/${s}_${i}.${a.format}?v=${this.ver}`;return fetch(r,{signal:this.abort.signal}).then(o=>o.ok?o.blob():Promise.reject(new Error(""+o.status))).then(o=>createImageBitmap(o)).then(o=>{if(this.tiles.get(n)!==e||this.destroyed){o.close();return}e.bmp=o,e.state="ready",this.requestRender()}).catch(()=>{this.tiles.get(n)===e&&(e.state="absent")}),this.evictTiles(),e}evictTiles(){if(this.tiles.size<=H)return;let t=[...this.tiles.entries()].filter(([,i])=>i.used!==this.frameNo).sort((i,n)=>i[1].used-n[1].used),s=this.tiles.size-H;for(let[i,n]of t){if(s<=0)break;n.bmp?.close(),this.tiles.delete(i),s--}}requestRender(){this.dirty=!0,this.raf||(this.raf=requestAnimationFrame(()=>{this.raf=0,this.dirty&&!this.destroyed&&(this.dirty=!1,this.render())}))}render(){let t=this.man;if(!t)return;this.frameNo++;let s=this.ctx,i=this.cam,n=window.devicePixelRatio||1;if(s.setTransform(n,0,0,n,0,0),s.imageSmoothingEnabled=!0,s.imageSmoothingQuality="high",this.waterPattern&&this.waterSize>0){let[r,o]=i.worldToScreen(0,0),c=i.scale*t.background.waterTilePx/this.waterSize;this.waterPattern.setTransform(new DOMMatrix().translate(r,o).scale(c)),s.fillStyle=this.waterPattern}else s.fillStyle=k(t.background.waterColor||[.85,.92,1]);s.fillRect(0,0,i.vw,i.vh);let e=Math.log2(i.scale/t.nativeScale),a=M(t.maxZoom+Math.ceil(e-.001),t.minZoom,t.maxZoom);this.drawTiles(a),this.drawMarkers(),this.drawLabels(),this.hud&&(this.hud.textContent=Math.round(i.scale/t.nativeScale*100)+"%")}drawTiles(t){let s=this.man,i=this.cam,n=this.ctx,e=s.levels[String(t)];if(!e)return;let a=s.tileSize,r=a/e.scale,o=s.world.originX,c=s.world.originY,h=i.worldBounds(),p=M(Math.floor((h[0]-o)/r),0,e.cols-1),d=M(Math.floor((h[1]-c)/r),0,e.rows-1),f=M(Math.floor((h[2]-o)/r),0,e.cols-1),x=M(Math.floor((h[3]-c)/r),0,e.rows-1),w=this.present.get(t);if(w){for(let m=d;m<=x;m++)for(let g=p;g<=f;g++){if(!w.has(g+"_"+m))continue;let L=o+g*r,y=c+m*r,[S,v]=i.worldToScreen(L,y),[b,O]=i.worldToScreen(L+r,y+r),B=Math.round(S),R=Math.round(v),Y=Math.round(b)-B,_=Math.round(O)-R,F=this.getTile(t,g,m);if(F.state==="ready"&&F.bmp){n.drawImage(F.bmp,B,R,Y,_);continue}for(let T=1;T<=t-s.minZoom;T++){let A=t-T,z=g>>T,I=m>>T;if(!this.present.get(A)?.has(z+"_"+I))break;let P=T<=2?this.getTile(A,z,I):this.tiles.get(this.tileKey(A,z,I));if(P&&P.state==="ready"&&P.bmp){let C=a/(1<<T),j=(g-(z<<T))*C,Z=(m-(I<<T))*C;n.drawImage(P.bmp,j,Z,C,C,B,R,Y,_);break}}}this.evictTiles()}}drawMarkers(){let t=this.cam,s=this.ctx,i=this.atlasMeta;if(!i||!this.atlasBmp)return;this.hitList=[];let n=t.worldBounds();for(let e of this.markerOrder){let a=i.sprites[e.tex],r=e.scale?.[0]??1,o=e.scale?.[1]??1,c=e.radius||32,h=a.radius||c,p=h?c/h:1,d=a.pw*p*r,f=a.ph*p*o,x=Math.max(d,f);if(e.x+x<n[0]||e.x-x>n[2]||e.y+x<n[1]||e.y-x>n[3])continue;let w=-d/2,m=-f/2+(a.offset_y||0)*p*o,[g,L]=t.worldToScreen(e.x,e.y),y=this.atlasBmp,S=0,v=0;if(e.type==="mountain"&&e.tint){let b=this.tintedSprite(a,e.tint);b?y=b:[S,v]=this.atlasSrc(a)}else[S,v]=this.atlasSrc(a);s.save(),s.translate(g,L),e.rot&&s.rotate(e.rot*V),s.scale(t.scale,t.scale),y===this.atlasBmp?s.drawImage(this.atlasBmp,S,v,a.pw,a.ph,w,m,d,f):s.drawImage(y,0,0,a.pw,a.ph,w,m,d,f),s.restore(),this.hitList.push({x:g,y:L+(m+f/2)*t.scale,hw:d/2*t.scale,hh:f/2*t.scale,rot:(e.rot||0)*V,marker:e})}}drawLabels(){let t=this.cam,s=this.ctx,i=t.worldBounds();s.textBaseline="middle",s.lineJoin="round",s.miterLimit=2;for(let n of this.labelLayouts){if(n.bbox[2]<i[0]||n.bbox[0]>i[2]||n.bbox[3]<i[1]||n.bbox[1]>i[3])continue;let e=n.L,a=Math.max(8,+e.size||24),r=a*t.scale;r<4||(s.font=`${r}px ${N}`,s.fillStyle=k(q(e.color,J)),s.strokeStyle=k(q(e.outline,Q)),s.lineWidth=Math.max(1,r*G),n.kind==="flat"?this.drawFlatLabel(n,a):this.drawPathLabel(n,a))}}drawFlatLabel(t,s){let i=this.cam,n=this.ctx,e=t.L,a=s*D,r=t.lines.length,o=e.align==null?1:e.align,[c,h]=i.worldToScreen(e.x,e.y);n.save(),n.translate(c,h),e.rot&&n.rotate(e.rot*V),n.textAlign="left";for(let p=0;p<r;p++){let d=t.lines[p];if(!d.text.trim())continue;let f=o===0?0:o===2?-d.width:-d.width/2,x=-a*(r/2)+(p+.5)*a,w=f*i.scale,m=x*i.scale;n.strokeText(d.text,w,m),n.fillText(d.text,w,m)}n.restore()}drawPathLabel(t,s){let i=this.cam,n=this.ctx,a=-(+t.L.pathOffset||0)*i.scale,r=t.total/2-t.widthW/2,o=this.pathSampler(t.curve,t.D,t.total);n.textAlign="center";for(let{ch:c,advW:h}of t.chars){if(c!==" "){let[p,d,f,x]=o(r+h/2),[w,m]=i.worldToScreen(p,d);n.save(),n.translate(w,m),n.rotate(Math.atan2(x,f)),n.strokeText(c,0,a),n.fillText(c,0,a),n.restore()}r+=h}}pathSampler(t,s,i){let n=t.length,e=1;return a=>{if(a<=0){let x=t[1][0]-t[0][0],w=t[1][1]-t[0][1],m=Math.hypot(x,w)||1;return[t[0][0]+x/m*a,t[0][1]+w/m*a,x/m,w/m]}if(a>=i){let x=t[n-1][0]-t[n-2][0],w=t[n-1][1]-t[n-2][1],m=Math.hypot(x,w)||1;return[t[n-1][0]+x/m*(a-i),t[n-1][1]+w/m*(a-i),x/m,w/m]}for(;e<n-1&&s[e]<a;)e++;for(;e>1&&s[e-1]>a;)e--;let r=t[e-1],o=t[e],c=s[e]-s[e-1]||1,h=(a-s[e-1])/c,p=o[0]-r[0],d=o[1]-r[1],f=Math.hypot(p,d)||1;return[r[0]+p*h,r[1]+d*h,p/f,d/f]}}},E=null;function W(){let u=document.querySelector(".map-viewer");if(!u){E&&(E.destroy(),E=null);return}if(u.dataset.initialized==="true")return;u.dataset.initialized="true",E&&E.destroy();let t;try{t=JSON.parse(u.dataset.cfg||"{}")}catch{t={dataPath:"static/map",maxOverzoom:4}}let s=new X(u,{dataPath:t.dataPath||"static/map",maxOverzoom:t.maxOverzoom||4});E=s,s.start().catch(e=>{s.destroyed||s.showError(e)});let i=document.querySelector(\'.page[data-frame="map"]\'),n=document.querySelector(".map-sidebar-toggle");if(i&&n){let e=()=>i.classList.toggle("map-sidebar-open");n.addEventListener("click",e,{signal:s.abort.signal})}typeof window<"u"&&window.addCleanup&&window.addCleanup(()=>{E===s&&(E=null),s.destroy()})}typeof document<"u"&&(document.addEventListener("nav",W),document.addEventListener("render",W),W());\n';
+var l;
+l = { __e: function(n2, l2, u3, t2) {
+  for (var i2, r2, o2; l2 = l2.__; ) if ((i2 = l2.__c) && !i2.__) try {
+    if ((r2 = i2.constructor) && null != r2.getDerivedStateFromError && (i2.setState(r2.getDerivedStateFromError(n2)), o2 = i2.__d), null != i2.componentDidCatch && (i2.componentDidCatch(n2, t2 || {}), o2 = i2.__d), o2) return i2.__E = i2;
+  } catch (l3) {
+    n2 = l3;
+  }
+  throw n2;
+} }, "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, Math.random().toString(8);
+
+// node_modules/preact/jsx-runtime/dist/jsxRuntime.mjs
+var f2 = 0;
+function u2(e2, t2, n2, o2, i2, u3) {
+  t2 || (t2 = {});
+  var a2, c2, p2 = t2;
+  if ("ref" in p2) for (c2 in p2 = {}, t2) "ref" == c2 ? a2 = t2[c2] : p2[c2] = t2[c2];
+  var l2 = { type: e2, props: p2, key: n2, ref: a2, __k: null, __: null, __b: 0, __e: null, __c: null, constructor: void 0, __v: --f2, __i: -1, __u: 0, __source: i2, __self: u3 };
+  if ("function" == typeof e2 && (a2 = e2.defaultProps)) for (c2 in a2) void 0 === p2[c2] && (p2[c2] = a2[c2]);
+  return l.vnode && l.vnode(l2), l2;
+}
+
+// src/components/MapBody.tsx
+var MapBody_default = ((userOpts) => {
+  const opts = { ...defaultMapPageOptions, ...userOpts };
+  const MapBody = (_props) => {
+    const cfg = { dataPath: opts.dataPath, maxOverzoom: opts.maxOverzoom };
+    return /* @__PURE__ */ u2("div", { class: "map-viewer", "data-cfg": JSON.stringify(cfg), children: [
+      /* @__PURE__ */ u2("canvas", { class: "map-canvas" }),
+      /* @__PURE__ */ u2("div", { class: "map-loading", children: "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430 \u043A\u0430\u0440\u0442\u044B\u2026" }),
+      /* @__PURE__ */ u2("div", { class: "map-error", hidden: true, children: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u043A\u0430\u0440\u0442\u0443" }),
+      /* @__PURE__ */ u2("div", { class: "map-zoom-hud", "aria-hidden": "true" })
+    ] });
+  };
+  MapBody.css = map_default;
+  MapBody.afterDOMLoaded = map_inline_default;
+  return MapBody;
+});
+
+// src/pageType.ts
+var MapPage = (userOpts) => {
+  const opts = { ...defaultMapPageOptions, ...userOpts };
+  const Body = MapBody_default(opts);
+  const matcher = ({ fileData }) => {
+    const fm = fileData.frontmatter;
+    return fm?.[opts.frontmatterFlag] === true;
+  };
+  return {
+    name: "MapPage",
+    priority: 25,
+    // above canvas-page (20); content-page stays the catch-all
+    match: matcher,
+    layout: "map",
+    frame: "map",
+    body: () => Body
+  };
+};
+
+// src/frames/MapFrame.tsx
+var MapFrame = {
+  name: "map",
+  css: `
+.page[data-frame="map"] {
+  max-width: none;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.page[data-frame="map"] > #quartz-body {
+  grid-template-columns: auto;
+  grid-template-rows: 1fr;
+  grid-template-areas:
+    "grid-center";
+  height: 100vh;
+  height: 100dvh;
+  padding: 0;
+}
+
+.page[data-frame="map"] > #quartz-body > .center.map-frame {
+  max-width: 100%;
+  min-width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.page[data-frame="map"] > #quartz-body.lock-scroll > * {
+  transform: none;
+}
+`,
+  render({ componentData, pageBody: Content, left }) {
+    const renderSlot = (Component) => Component(componentData);
+    return /* @__PURE__ */ u2("div", { class: "center map-frame", children: [
+      /* @__PURE__ */ u2("button", { class: "map-sidebar-toggle", type: "button", "aria-label": "Toggle sidebar", children: [
+        /* @__PURE__ */ u2(
+          "svg",
+          {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "16",
+            height: "16",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            "stroke-width": "2",
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+            class: "map-sidebar-icon-open",
+            children: [
+              /* @__PURE__ */ u2("line", { x1: "3", y1: "6", x2: "21", y2: "6" }),
+              /* @__PURE__ */ u2("line", { x1: "3", y1: "12", x2: "21", y2: "12" }),
+              /* @__PURE__ */ u2("line", { x1: "3", y1: "18", x2: "21", y2: "18" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ u2(
+          "svg",
+          {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "16",
+            height: "16",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            "stroke-width": "2",
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+            class: "map-sidebar-icon-close",
+            children: [
+              /* @__PURE__ */ u2("line", { x1: "18", y1: "6", x2: "6", y2: "18" }),
+              /* @__PURE__ */ u2("line", { x1: "6", y1: "6", x2: "18", y2: "18" })
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ u2("aside", { class: "map-sidebar", children: left.map((BodyComponent) => renderSlot(BodyComponent)) }),
+      /* @__PURE__ */ u2("div", { class: "map-stage", children: renderSlot(Content) })
+    ] });
+  }
+};
+
+export { MapBody_default as MapBody, MapFrame, MapPage };
+//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.js.map
