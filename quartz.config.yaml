@@ -128,51 +128,6 @@ plugins:
     layout:
       position: left
       priority: 50
-  # Локальная (форкнутая) копия плагина графа: в неё добавлена опция hideTags,
-  # которой нет в upstream. Исходники — в ./plugins/graph.
-  - source: ./plugins/graph
-    enabled: true
-    options:
-      # Локальный граф (в правой панели): показываем соседей на 2 шага и
-      # подсвечиваем связи при наведении — как в Obsidian.
-      localGraph:
-        depth: 2
-        scale: 1.1
-        repelForce: 0.7
-        centerForce: 0.3
-        linkDistance: 40
-        fontSize: 0.4
-        focusOnHover: true
-        showTags: false
-        hideTags: [changelog, дашборд, служебное, сессия, секреты]
-        hideFolderPages: true
-      # Глобальный граф (Ctrl/Cmd + G): свободная силовая раскладка вместо
-      # радиальной — именно так выглядит граф в Obsidian.
-      globalGraph:
-        depth: -1
-        scale: 0.9
-        repelForce: 0.8
-        centerForce: 0.25
-        linkDistance: 45
-        fontSize: 0.35
-        focusOnHover: true
-        enableRadial: false
-        showTags: false
-        hideTags: [changelog, дашборд, служебное, секреты]
-        hideFolderPages: true
-    layout:
-      position: right
-      priority: 10
-  # Локальный плагин интерактивной карты кампании: заметка с `map-page: true`
-  # во frontmatter рендерится как полноэкранная карта (запечённые тайлы из
-  # map-editor + векторные маркеры/подписи). Исходники — в ./plugins/map,
-  # данные карты — в quartz/static/map (см. publish-map.ps1).
-  - source: ./plugins/map
-    enabled: true
-    options:
-      dataPath: static/map
-      frontmatterFlag: map-page
-      maxOverzoom: 4
   - source: github:quartz-community/search
     enabled: true
     layout:
