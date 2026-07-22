@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"a10557007c14c726","type":"file","file":"70.Справка/Ссылки.base","x":-11460,"y":-1280,"width":720,"height":907}
+	],
+	"edges":[],
+	"metadata":{
+		"version":"1.0-1.0",
+		"frontmatter":{},
+		"startNode":"99586d6160420d6c"
+	}
+}
