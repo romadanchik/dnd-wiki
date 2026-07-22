@@ -1,0 +1,31 @@
+@use "./variables.scss" as *;
+
+// put your custom CSS here!
+
+// Прокручиваемая лента «Недавно изменённые»: показываем больше заметок,
+// но ограничиваем высоту и включаем вертикальный скролл.
+.recent-notes {
+  & > .recent-ul {
+    max-height: 22rem;
+    overflow-y: auto;
+    padding-right: 0.4rem;
+
+    // тонкая аккуратная полоса прокрутки
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray) transparent;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--gray);
+      border-radius: 3px;
+    }
+  }
+}
+
+// «История заметки» — компактная сворачиваемая ссылка на коммиты GitHub
+// (добавляется в конец каждой заметки скриптом sync-content.ps1).
+.callout[data-callout="info"] .callout-title-inner {
+  font-size: 0.9rem;
+}

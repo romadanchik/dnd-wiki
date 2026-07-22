@@ -1,0 +1,96 @@
+{
+  "name": "@dnd-wiki/map-page",
+  "version": "0.1.0",
+  "description": "Interactive campaign map page for Quartz v5: pre-baked tile pyramid + vector overlay (markers, labels) rendered on Canvas 2D.",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./frames": {
+      "types": "./dist/frames/index.d.ts",
+      "import": "./dist/frames/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "preact": "^10.0.0"
+  },
+  "peerDependenciesMeta": {
+    "preact": {
+      "optional": false
+    }
+  },
+  "dependencies": {
+    "@quartz-community/types": "github:quartz-community/types",
+    "@quartz-community/utils": "github:quartz-community/utils"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "preact": "^10.28.2",
+    "sass": "^1.97.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "quartz": {
+    "name": "map-page",
+    "displayName": "Map Page",
+    "category": [
+      "pageType",
+      "component"
+    ],
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 50,
+    "defaultEnabled": true,
+    "defaultOptions": {
+      "dataPath": "static/map",
+      "frontmatterFlag": "map-page",
+      "maxOverzoom": 4
+    },
+    "frames": {
+      "MapFrame": {
+        "exportName": "MapFrame"
+      }
+    },
+    "optionSchema": {
+      "dataPath": {
+        "type": "string"
+      },
+      "frontmatterFlag": {
+        "type": "string"
+      },
+      "maxOverzoom": {
+        "type": "number"
+      }
+    }
+  },
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10.9.2"
+  }
+}

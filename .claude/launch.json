@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "quartz",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["./quartz/bootstrap-cli.mjs", "build", "--serve"],
+      "port": 8080
+    }
+  ]
+}
